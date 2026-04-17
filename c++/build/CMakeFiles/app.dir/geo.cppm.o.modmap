@@ -1,4 +1,0 @@
--x c++-module
--fmodule-output="CMakeFiles/app.dir/geometry.pcm"
--fmodule-file="math=CMakeFiles/app.dir/math.pcm"
--fmodule-file="std=CMakeFiles/__cmake_cxx_std_26.dir/std.pcm"
