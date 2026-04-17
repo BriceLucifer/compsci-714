@@ -1,0 +1,3 @@
+-fmodule-file="std=CMakeFiles/__cmake_cxx_std_26.dir/std.pcm"
+-fmodule-file="geometry=CMakeFiles/app.dir/geometry.pcm"
+-fmodule-file="math=CMakeFiles/app.dir/math.pcm"

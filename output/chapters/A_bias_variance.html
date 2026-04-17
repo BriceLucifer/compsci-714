@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Bias-Variance &amp; Design Choices - exam</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-edec54c6.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-e56f3d6c.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">exam</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="bias-variance-tradeoff--design-choices"><a class="header" href="#bias-variance-tradeoff--design-choices">Bias-Variance Tradeoff &amp; Design Choices</a></h1>
+<h2 id="exam-importance"><a class="header" href="#exam-importance">Exam Importance</a></h2>
+<p><strong>MUST</strong> | The single most tested topic: 4 questions across all exams, ~20 marks total</p>
+<hr>
+<h2 id="feynman-draft"><a class="header" href="#feynman-draft">Feynman Draft</a></h2>
+<p>Imagine you’re learning to throw darts at a bullseye.</p>
+<ul>
+<li>
+<p><strong>High bias（高偏差）</strong> = you consistently miss in the same direction. Your aim is systematically off. You’re too rigid — like using only your wrist instead of your whole arm. This is <strong>underfitting（欠拟合）</strong> — your model is too simple to capture the real pattern.</p>
+</li>
+<li>
+<p><strong>High variance（高方差）</strong> = your throws are scattered all over the board. Sometimes you hit the bullseye, sometimes the wall. You’re too sensitive to tiny movements. This is <strong>overfitting（过拟合）</strong> — your model memorises the training data noise instead of learning the real pattern.</p>
+</li>
+</ul>
+<p><strong>How do you diagnose this from training curves?</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>What You See</th><th>Diagnosis</th><th>Name</th></tr>
+</thead>
+<tbody>
+<tr><td>Training accuracy HIGH, Validation accuracy LOW</td><td>High variance</td><td><strong>Overfitting</strong></td></tr>
+<tr><td>Training accuracy LOW, Validation accuracy LOW</td><td>High bias</td><td><strong>Underfitting</strong></td></tr>
+<tr><td>Training accuracy HIGH, Validation accuracy HIGH</td><td>Good fit!</td><td>Keep it</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Toy Example with Numbers:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Scenario</th><th>Train Acc</th><th>Val Acc</th><th>Diagnosis</th><th>What to Do</th></tr>
+</thead>
+<tbody>
+<tr><td>A</td><td>95%</td><td>60%</td><td><strong>Overfitting（过拟合）</strong></td><td>Regularisation, more data</td></tr>
+<tr><td>B</td><td>50%</td><td>50%</td><td><strong>Underfitting（欠拟合）</strong></td><td>Bigger model, remove regularisation</td></tr>
+<tr><td>C</td><td>92%</td><td>88%</td><td><strong>Good fit</strong></td><td>Ship it</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>Common Misconception: “If validation accuracy is low, always add regularisation.” WRONG! Regularisation helps overfitting (A), but makes underfitting (B) even WORSE because it constrains the model further.</p>
+</blockquote>
+<blockquote>
+<p>Core Intuition: Bias（偏差） = model too simple for the problem. Variance（方差） = model too complex for the data amount.</p>
+</blockquote>
+<hr>
+<h2 id="the-design-choices-decision-tree-exam-essential"><a class="header" href="#the-design-choices-decision-tree-exam-essential">The Design Choices Decision Tree (EXAM ESSENTIAL)</a></h2>
+<p>This is the teacher’s favourite question format. Memorise this:</p>
+<pre><code>Step 1: DIAGNOSE
+  Train &gt;&gt; Val? → Overfitting (high variance)
+  Train ≈ Val ≈ low? → Underfitting (high bias)
+
+Step 2: PRESCRIBE
+  If OVERFITTING（过拟合）:
+    ✅ Regularisation（正则化） (L1, L2, Dropout) → constrains model complexity
+    ✅ More/diverse training data → helps generalise（泛化）
+    ✅ Data augmentation（数据增强） → more variety without new data
+    ✅ Batch normalisation（批量归一化） → regularising effect
+    ✅ Early stopping（提前停止） → stop before overfitting
+    ✅ Reduce model size → less capacity to memorise
+    ❌ More epochs → makes it WORSE
+    ❌ Bigger model → makes it WORSE
+
+  If UNDERFITTING（欠拟合）:
+    ✅ Increase model size (more layers/neurons) → more capacity（容量）
+    ✅ Train longer → give it time to learn
+    ✅ Remove/reduce regularisation → stop constraining
+    ✅ Better features / more data → more signal
+    ✅ Transfer learning（迁移学习） → start from pretrained model
+    ❌ Regularisation → makes it WORSE
+    ❌ Dropout → makes it WORSE
+    ❌ Smaller model → makes it WORSE
+</code></pre>
+<hr>
+<h2 id="past-exam-questions-with-answer-logic"><a class="header" href="#past-exam-questions-with-answer-logic">Past Exam Questions with Answer Logic</a></h2>
+<h3 id="2024-q2-6-marks--overfitting-scenario"><a class="header" href="#2024-q2-6-marks--overfitting-scenario">2024 Q2 [6 marks] — Overfitting Scenario</a></h3>
+<p><strong>Setup:</strong> 5 hidden layers, ReLU, 20 neurons/layer, 1000 epochs. Train=95%, Val=60%.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Suggestion</th><th>Answer</th><th>Reasoning</th></tr>
+</thead>
+<tbody>
+<tr><td>Train for 2000 epochs</td><td><strong>NO</strong></td><td>Already overfitting → more training = memorise more noise</td></tr>
+<tr><td>Larger dataset</td><td><strong>YES</strong></td><td>More diverse data helps learn general patterns, not noise</td></tr>
+<tr><td>L2 regularisation</td><td><strong>YES</strong></td><td>Penalises large weights → simpler, more generalisable model</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="practice-q3-6-marks--underfitting-scenario"><a class="header" href="#practice-q3-6-marks--underfitting-scenario">Practice Q3 [6 marks] — Underfitting Scenario</a></h3>
+<p><strong>Setup:</strong> 2 hidden layers, ReLU, 5 neurons/layer, 2000 epochs, L1 regularisation. Train=50%, Val=50% (achievable=95%).</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Suggestion</th><th>Answer</th><th>Reasoning</th></tr>
+</thead>
+<tbody>
+<tr><td>Increase network size</td><td><strong>YES</strong></td><td>Underfitting = model too small → need more capacity</td></tr>
+<tr><td>Initialise weights to 0</td><td><strong>NO</strong></td><td>Creates symmetry → all neurons learn identical things → can’t differentiate features</td></tr>
+<tr><td>Use dropout</td><td><strong>NO</strong></td><td>Dropout is regularisation → fights overfitting, not underfitting</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="2025-q2-3-marks--curve-interpretation"><a class="header" href="#2025-q2-3-marks--curve-interpretation">2025 Q2 [3 marks] — Curve Interpretation</a></h3>
+<p><strong>Setup:</strong> Training curves after 20 epochs showing gap between train/val accuracy and diverging loss curves.</p>
+<p><strong>(a)</strong> Diagnose: High variance (overfitting) — clear gap between training and validation. Possibly also high bias if training loss is still high.</p>
+<p><strong>(b)</strong> Two changes (each targeting different aspect):</p>
+<ul>
+<li>Regularisation (e.g., L2, dropout) → reduces overfitting</li>
+<li>Data augmentation → more varied training data → better generalisation</li>
+<li>Batch normalisation → has regularising effect</li>
+<li>Increase model size (if bias is high) → more capacity to fit</li>
+</ul>
+<hr>
+<h2 id="how-to-read-training-curves"><a class="header" href="#how-to-read-training-curves">How to Read Training Curves</a></h2>
+<p><img src="../images/loss_diagnosis.png" alt="Loss Curve Diagnosis — all exam scenarios"></p>
+<p><strong>Quick reference table:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>What you see on the plot</th><th>Diagnosis</th><th>Fix</th></tr>
+</thead>
+<tbody>
+<tr><td>Train loss ↓, Val loss ↑ after a point</td><td><strong>Overfitting（过拟合）</strong> (high variance)</td><td>Dropout, L2, more data, early stop</td></tr>
+<tr><td>Both losses stay HIGH</td><td><strong>Underfitting（欠拟合）</strong> (high bias)</td><td>Bigger model, more epochs, less regularisation</td></tr>
+<tr><td>Loss oscillates / explodes</td><td><strong>LR too high</strong></td><td>Reduce LR ×10, use scheduler</td></tr>
+<tr><td>Both losses barely move</td><td><strong>LR too low</strong></td><td>Increase LR, use warm-up</td></tr>
+<tr><td>Both losses ↓ and converge</td><td><strong>Good fit</strong></td><td>Keep going or early stop</td></tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="english-expression-templates"><a class="header" href="#english-expression-templates">English Expression Templates</a></h2>
+<p><strong>Diagnosing:</strong></p>
+<ul>
+<li>“The model displays high variance as there is a clear gap between training and validation accuracy.”</li>
+<li>“This indicates overfitting, where the model fits the training data too closely but fails to generalise.”</li>
+</ul>
+<p><strong>Prescribing:</strong></p>
+<ul>
+<li>“Applying regularisation can help reduce overfitting by limiting model complexity.”</li>
+<li>“Training on a larger dataset might help the model learn more general patterns.”</li>
+<li>“This will not help because the model is already underfitting — adding regularisation would constrain it further.”</li>
+</ul>
+<hr>
+<h2 id="中文思维--英文输出"><a class="header" href="#中文思维--英文输出">中文思维 → 英文输出</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>你脑中的中文想法</th><th>考试中应该写的英文</th></tr>
+</thead>
+<tbody>
+<tr><td>过拟合了，训练高验证低</td><td>“The model is overfitting — the training accuracy (X%) is significantly higher than the validation accuracy (Y%).”</td></tr>
+<tr><td>欠拟合，两个都很低</td><td>“The model is underfitting, as both training and validation accuracies are low, indicating insufficient model capacity.”</td></tr>
+<tr><td>加正则化能改善</td><td>“Applying regularisation is likely to improve validation accuracy by constraining model complexity.”</td></tr>
+<tr><td>不能再多训练了，会更差</td><td>“Training for more epochs will not help — it is likely to worsen overfitting as the model continues to memorise training noise.”</td></tr>
+<tr><td>dropout不能解决欠拟合</td><td>“Dropout will not help because the model is underfitting. Dropout reduces effective capacity, which would worsen the problem.”</td></tr>
+<tr><td>模型太简单了，学不到东西</td><td>“The model lacks sufficient capacity to capture the underlying patterns in the data.”</td></tr>
+<tr><td>需要更多数据来泛化</td><td>“Increasing the dataset size is likely to help the model generalise better by providing more diverse examples.”</td></tr>
+<tr><td>权重初始化为0不行</td><td>“Initialising all weights to zero creates symmetry — all neurons learn identical features, preventing the network from differentiating.”</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="本章-chinglish-纠正"><a class="header" href="#本章-chinglish-纠正">本章 Chinglish 纠正</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Chinglish (avoid)</th><th>Correct English</th></tr>
+</thead>
+<tbody>
+<tr><td>“The model is overfit”</td><td>“The model is overfitting” (use progressive form for the state)</td></tr>
+<tr><td>“It should add regularisation”</td><td>“Applying regularisation would help”</td></tr>
+<tr><td>“The gap is too big”</td><td>“There is a significant discrepancy between training and validation performance”</td></tr>
+<tr><td>“More data can solve”</td><td>“Increasing the dataset size is likely to help the model generalise better”</td></tr>
+<tr><td>“The model is not enough complex”</td><td>“The model has insufficient capacity”</td></tr>
+<tr><td>“Train more epoch will be worse”</td><td>“Training for more epochs is likely to worsen overfitting”</td></tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="whiteboard-self-test"><a class="header" href="#whiteboard-self-test">Whiteboard Self-Test</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"> Can you draw the bias-variance diagnosis table from memory?</li>
+<li><input disabled="" type="checkbox"> Given train=95%/val=55%, what’s the diagnosis? What 3 things help?</li>
+<li><input disabled="" type="checkbox"> Given train=50%/val=50%, what’s the diagnosis? Why does dropout NOT help?</li>
+<li><input disabled="" type="checkbox"> Can you explain why zero weight initialisation is bad?</li>
+<li><input disabled="" type="checkbox"> Can you explain why more epochs worsens overfitting?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../chapters/A_overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../chapters/A_optimization.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../chapters/A_overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../chapters/A_optimization.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mathjax-config-317ab477.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

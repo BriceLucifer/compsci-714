@@ -1,0 +1,71 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "Clang",
+	"compiler-simulate-id" : "",
+	"config" : "",
+	"cxx-modules" : 
+	{
+		"CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm.o" : 
+		{
+			"bmi-only" : false,
+			"compile-features" : 
+			[
+				"cxx_std_26"
+			],
+			"compile-options" : 
+			[
+				"-stdlib=libc++"
+			],
+			"definitions" : [],
+			"destination" : null,
+			"include-directories" : 
+			[
+				"/opt/homebrew/opt/llvm/share/libc++/v1"
+			],
+			"name" : "CXX_MODULES",
+			"relative-directory" : "",
+			"source" : "/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm",
+			"type" : "CXX_MODULES",
+			"visibility" : "PUBLIC"
+		},
+		"CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm.o" : 
+		{
+			"bmi-only" : false,
+			"compile-features" : 
+			[
+				"cxx_std_26"
+			],
+			"compile-options" : 
+			[
+				"-stdlib=libc++"
+			],
+			"definitions" : [],
+			"destination" : null,
+			"include-directories" : 
+			[
+				"/opt/homebrew/opt/llvm/share/libc++/v1"
+			],
+			"name" : "CXX_MODULES",
+			"relative-directory" : "",
+			"source" : "/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm",
+			"type" : "CXX_MODULES",
+			"visibility" : "PUBLIC"
+		}
+	},
+	"database-info" : null,
+	"dir-cur-bld" : "/Users/yunxiang/Nexus/notes/compsci-714/exam/c++/build",
+	"dir-cur-src" : "/Users/yunxiang/Nexus/notes/compsci-714/exam/c++",
+	"dir-top-bld" : "/Users/yunxiang/Nexus/notes/compsci-714/exam/c++/build",
+	"dir-top-src" : "/Users/yunxiang/Nexus/notes/compsci-714/exam/c++",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"/opt/homebrew/opt/llvm/share/libc++/v1"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/Users/yunxiang/Nexus/notes/compsci-714/exam/c++/build/CMakeFiles/__cmake_cxx_std_26.dir",
+	"sources" : {}
+}

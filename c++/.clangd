@@ -1,0 +1,4 @@
+CompileFlags:
+  Add:
+    - -stdlib=libc++
+  Compiler: /opt/homebrew/opt/llvm/bin/clang++

@@ -1,0 +1,11 @@
+[book]
+title = "exam"
+authors = ["BriceLucifer"]
+language = "en"
+
+[build]
+build-dir = "output"
+
+[output.html]
+mathjax-support = true
+additional-js = ["mathjax-config.js"]

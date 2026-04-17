@@ -1,0 +1,24 @@
+{
+  "revision": 0,
+  "rules": [
+    {
+      "primary-output": "CMakeFiles/app.dir/geo.cppm.o",
+      "provides": [
+        {
+          "is-interface": true,
+          "logical-name": "geometry",
+          "source-path": "/Users/yunxiang/Nexus/notes/compsci-714/exam/c++/geo.cppm"
+        }
+      ],
+      "requires": [
+        {
+          "logical-name": "math"
+        },
+        {
+          "logical-name": "std"
+        }
+      ]
+    }
+  ],
+  "version": 1
+}

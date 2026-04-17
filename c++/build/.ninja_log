@@ -1,0 +1,26 @@
+# ninja log v7
+1	27	1776384447157113923	CMakeFiles/app.dir/main.cpp.o.ddi	15ffc45191eeca9f
+1	27	1776384447157231088	CMakeFiles/app.dir/math.cppm.o.ddi	1f908a980115a763
+1	27	1776384447157346086	CMakeFiles/app.dir/geo.cppm.o.ddi	734c73c66323f985
+1	37	1776384447156734929	CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm.o.ddi	16e7619bf887454b
+1	73	1776384447156962384	CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm.o.ddi	85033cb9075cb489
+73	81	1776384447236261956	CMakeFiles/__cmake_cxx_std_26.dir/CXX.dd	5ac9c40aad6b7959
+73	81	1776384447236261956	CMakeFiles/__cmake_cxx_std_26.dir/CXXModules.json	5ac9c40aad6b7959
+73	81	1776384447236261956	CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm.o.modmap	5ac9c40aad6b7959
+73	81	1776384447236261956	CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm.o.modmap	5ac9c40aad6b7959
+81	89	1776384447244416539	CMakeFiles/app.dir/CXX.dd	375be372a6200c03
+81	89	1776384447244416539	CMakeFiles/app.dir/CXXModules.json	375be372a6200c03
+81	89	1776384447244416539	CMakeFiles/app.dir/main.cpp.o.modmap	375be372a6200c03
+81	89	1776384447244416539	CMakeFiles/app.dir/math.cppm.o.modmap	375be372a6200c03
+81	89	1776384447244416539	CMakeFiles/app.dir/geo.cppm.o.modmap	375be372a6200c03
+81	803	1776384447954258251	CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.cppm.o	e5754cbbfb52ed1d
+81	803	1776384447954258251	CMakeFiles/__cmake_cxx_std_26.dir/std.pcm	e5754cbbfb52ed1d
+805	832	1776384447986321175	CMakeFiles/app.dir/math.cppm.o	48ce31f184d38a26
+805	832	1776384447986321175	CMakeFiles/app.dir/math.pcm	48ce31f184d38a26
+832	859	1776384448013519674	CMakeFiles/app.dir/geo.cppm.o	1e3a8354ce5d22bc
+832	859	1776384448013519674	CMakeFiles/app.dir/geometry.pcm	1e3a8354ce5d22bc
+804	865	1776384448019301418	CMakeFiles/__cmake_cxx_std_26.dir/opt/homebrew/opt/llvm/share/libc++/v1/std.compat.cppm.o	72cf6c5c96c1a3fc
+804	865	1776384448019301418	CMakeFiles/__cmake_cxx_std_26.dir/std.compat.pcm	72cf6c5c96c1a3fc
+865	895	1776384448021137848	lib__cmake_cxx_std_26.a	4081748ee5c1b127
+859	1055	1776384448014876653	CMakeFiles/app.dir/main.cpp.o	b1373787408d5b04
+1055	1107	1776384448211484380	app	a4c4d340ec46d06d

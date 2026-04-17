@@ -1,0 +1,9 @@
+ninja_dyndep_version = 1.0
+build CMakeFiles/app.dir/main.cpp.o: dyndep | CMakeFiles/__cmake_cxx_std_26.dir/std.pcm CMakeFiles/app.dir/geometry.pcm
+
+build CMakeFiles/app.dir/math.cppm.o | CMakeFiles/app.dir/math.pcm: dyndep | CMakeFiles/__cmake_cxx_std_26.dir/std.pcm
+  restat = 1
+
+build CMakeFiles/app.dir/geo.cppm.o | CMakeFiles/app.dir/geometry.pcm: dyndep | CMakeFiles/app.dir/math.pcm CMakeFiles/__cmake_cxx_std_26.dir/std.pcm
+  restat = 1
+
