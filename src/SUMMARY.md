@@ -30,6 +30,7 @@
 
 - [✍️ Express It Yourself — All Modules](./chapters/output_practice.md)
 - [🧩 考场速查卡 — 中文→英文拼装](./chapters/exam_cheatsheet.md)
+- [📄 A4 Cheatsheet](./chapters/a4_cheatsheet.md)
 
 # English Expression Guide
 
